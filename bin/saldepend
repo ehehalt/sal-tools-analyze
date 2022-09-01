@@ -67,7 +67,6 @@ if ARGV.length > 0
     puts "digraph {"
     puts "  layout=\"circo\";"
     baseNameFiles = files.collect { | file | File.basename(file) }
-    puts baseNameFiles
     files.sort.each do | file |
     	info(file, baseNameFiles)
     end
