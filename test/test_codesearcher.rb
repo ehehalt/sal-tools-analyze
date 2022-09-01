@@ -17,7 +17,7 @@ class TestCodeSearcher < MiniTest::Test
   
   def test_initialize_default
     cs = Sal::CodeSearcher.new
-    assert_equal(nil, cs.filesearcher)
+    assert_nil(cs.filesearcher)
     assert_equal([], cs.searchpattern)
   end
   

@@ -15,14 +15,15 @@ class TestSearchPattern < MiniTest::Test
     @st_comments = Sal::SearchType::COMMENTS
     @func_replace = Sal::SearchFunction::REPLACE
     @func_delete = Sal::SearchFunction::REMOVE
+    @func_search = Sal::SearchFunction::SEARCH
   end
   
   def test_initialize_defaults
     pattern = Sal::SearchPattern.new(@search)
     
     assert_equal(@search, pattern.search)
-    assert_equal(nil, pattern.replace)
-    assert_equal(nil, pattern.comment)
+    assert_nil(pattern.replace)
+    assert_nil(pattern.comment)
     assert_equal(true, pattern.search_in_code)
     assert_equal(true, pattern.search_in_comments)
     assert_equal(@st_complete, pattern.type)
@@ -48,8 +49,8 @@ class TestSearchPattern < MiniTest::Test
     pattern = Sal::SearchPattern.new(@search, nil, @st_code)
     
     assert_equal(@search, pattern.search)
-    assert_equal(nil, pattern.replace)
-    assert_equal(nil, pattern.comment)
+    assert_nil(pattern.replace)
+    assert_nil(pattern.comment)
     assert_equal(true, pattern.search_in_code)
     assert_equal(false, pattern.search_in_comments)
     assert_equal(@st_code, pattern.type)
@@ -59,8 +60,8 @@ class TestSearchPattern < MiniTest::Test
     pattern = Sal::SearchPattern.new(@search, nil, @st_comments)
     
     assert_equal(@search, pattern.search)
-    assert_equal(nil, pattern.replace)
-    assert_equal(nil, pattern.comment)
+    assert_nil(pattern.replace)
+    assert_nil(pattern.comment)
     assert_equal(false, pattern.search_in_code)
     assert_equal(true, pattern.search_in_comments)
     assert_equal(@st_comments, pattern.type)
@@ -70,8 +71,8 @@ class TestSearchPattern < MiniTest::Test
     pattern = Sal::SearchPattern.new(@search, nil, @st_comments, @func_search)
     
     assert_equal(@search, pattern.search)
-    assert_equal(nil, pattern.replace)
-    assert_equal(nil, pattern.comment)
+    assert_nil(pattern.replace)
+    assert_nil(pattern.comment)
     assert_equal(false, pattern.search_in_code)
     assert_equal(true, pattern.search_in_comments)
     assert_equal(@st_comments, pattern.type)
@@ -82,8 +83,8 @@ class TestSearchPattern < MiniTest::Test
     pattern = Sal::SearchPattern.new(@search, nil, @st_comments, @func_search)
     
     assert_equal(@search, pattern.search)
-    assert_equal(nil, pattern.replace)
-    assert_equal(nil, pattern.comment)
+    assert_nil(pattern.replace)
+    assert_nil(pattern.comment)
     assert_equal(false, pattern.search_in_code)
     assert_equal(true, pattern.search_in_comments)
     assert_equal(@st_comments, pattern.type)

@@ -24,7 +24,7 @@ class TestWindow < MiniTest::Test
     assert_equal(item, wndw.item)
     assert_equal(name, wndw.name)
     assert_equal(type, wndw.type)
-    assert_equal(nil,  wndw.pictab)
+    assert_nil(wndw.pictab)
   end
   
   def test_pictab

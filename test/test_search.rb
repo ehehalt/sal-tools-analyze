@@ -190,7 +190,7 @@ END_OF_STRING
     # really nothing changed?
     rx = /Fql/
     code.items.each do | item |
-      assert_equal(nil, rx.match(item.code))
+      assert_nil(rx.match(item.code))
     end
   end
   

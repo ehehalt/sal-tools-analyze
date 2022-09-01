@@ -37,12 +37,12 @@ class TestItem < MiniTest::Test
     assert_equal(Sal::Format::TEXT, item.format)
     assert_equal(1, item.level)
     assert_equal(false, item.commented?)
-    assert_equal(nil, item.parent)
+    assert_nil(item.parent)
     assert_equal(0, item.childs.count)
     assert_equal(code, item.code)
     assert_equal(true, item.analyzed?)
     assert_equal(-1, item.code_line_nr)
-    assert_equal(nil, item.tag)
+    assert_nil(item.tag)
   end
 
   def test_item_outline_version_indented
@@ -54,12 +54,12 @@ class TestItem < MiniTest::Test
     assert_equal(Sal::Format::INDENTED, item.format)
     assert_equal(1, item.level)
     assert_equal(false, item.commented?)
-    assert_equal(nil, item.parent)
+    assert_nil(item.parent)
     assert_equal(0, item.childs.count)
     assert_equal(code, item.code)
     assert_equal(true, item.analyzed?)
     assert_equal(-1, item.code_line_nr)
-    assert_equal(nil, item.tag)
+    assert_nil(item.tag)
   end
 
   def test_item_file_include
@@ -72,12 +72,12 @@ class TestItem < MiniTest::Test
     assert_equal(Sal::Format::TEXT, item.format)
     assert_equal(2, item.level)
     assert_equal(false, item.commented?)
-    assert_equal(nil, item.parent)
+    assert_nil(item.parent)
     assert_equal(0, item.childs.count)
     assert_equal(true, item.analyzed?)
     assert_equal(code, item.code)
     assert_equal(-1, item.code_line_nr)
-    assert_equal(nil, item.tag)
+    assert_nil(item.tag)
   end
   
   def test_item_commented

@@ -9,7 +9,7 @@ class TestCompiler < MiniTest::Test
   
   def test_initialize
     compiler = Sal::Compiler.new()
-    assert_equal(nil, compiler.version)
+    assert_nil(compiler.version)
 
     compiler = Sal::Compiler.new("1.1")
     assert_equal("1.1", compiler.version.td)

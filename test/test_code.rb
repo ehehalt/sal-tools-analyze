@@ -141,7 +141,7 @@ class TestCode < MiniTest::Test
       assert_equal(line, item.line, line)
       assert_equal(vars.format, item.format)
       assert_equal(false, item.commented?)
-      assert_equal(nil, item.parent)
+      assert_nil(item.parent)
       assert_equal(0, item.childs.count)
       assert_equal(1, item.code_line_nr)
       assert_equal(true, item.analyzed?)
@@ -211,7 +211,7 @@ END_OF_STRING
   end
   
   def test_app_startup_item
-    assert_equal(nil, Sal::Code.new(@files_appstartup[0]).app_startup_item)
+    assert_nil(Sal::Code.new(@files_appstartup[0]).app_startup_item)
     app_startup_item = Sal::Code.new(@files_appstartup[1]).app_startup_item
     refute_nil(app_startup_item)
     assert_equal(2, app_startup_item.childs.count)

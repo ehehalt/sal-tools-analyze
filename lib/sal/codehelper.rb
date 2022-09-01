@@ -14,7 +14,7 @@ module Sal
     def CodeHelper.read_code_from_file(filename)
       code = IO.binread filename
       if(CodeHelper.utf16le? code)
-        code.encode!("UTF-8", "UTF-16LE")
+        code.encode!("UTF-8", "UTF-16")
         # code.encode!("windows-1250", "UTF-16")
       end
       return code

@@ -13,7 +13,7 @@ class TestVersion < MiniTest::Test
     test_empty = Array.new
     test_empty += (0..25).to_a
     test_empty += [29, 30, 33, 36, 38, 40, 42, 43, 44, 45, 46, 49, 51]
-    test_empty += (53..100).to_a
+    test_empty += (58..100).to_a
     test_empty.each do | test | 
       i += 1
       begin
@@ -32,7 +32,7 @@ class TestVersion < MiniTest::Test
     assert_equal("3.1", Sal::Version.file_to_td(32))
     assert_equal("4.0", Sal::Version.file_to_td(34))
     assert_equal("4.1", Sal::Version.file_to_td(35))
-	# assert_equal( "4.2", Sal::Version.file_to_td(35))
+	  # assert_equal( "4.2", Sal::Version.file_to_td(35))
     # assert_equal("5.0", Sal::Version.file_to_td(37))
     assert_equal("5.1", Sal::Version.file_to_td(37))
     assert_equal("5.2", Sal::Version.file_to_td(39))
@@ -40,6 +40,11 @@ class TestVersion < MiniTest::Test
     assert_equal("6.1", Sal::Version.file_to_td(47))
     assert_equal("6.2", Sal::Version.file_to_td(50))
     assert_equal("6.3", Sal::Version.file_to_td(52))
+    assert_equal("7.0", Sal::Version.file_to_td(53))
+    assert_equal("7.1", Sal::Version.file_to_td(54))
+    assert_equal("7.2", Sal::Version.file_to_td(55))
+    assert_equal("7.3", Sal::Version.file_to_td(56))
+    assert_equal("7.4", Sal::Version.file_to_td(57))
 	
   end
   
@@ -60,6 +65,11 @@ class TestVersion < MiniTest::Test
     assert_equal(47, Sal::Version.td_to_file("6.1"))
     assert_equal(50, Sal::Version.td_to_file("6.2"))
     assert_equal(52, Sal::Version.td_to_file("6.3"))
+    assert_equal(53, Sal::Version.td_to_file("7.0"))
+    assert_equal(54, Sal::Version.td_to_file("7.1"))
+    assert_equal(55, Sal::Version.td_to_file("7.2"))
+    assert_equal(56, Sal::Version.td_to_file("7.3"))
+    assert_equal(57, Sal::Version.td_to_file("7.4"))
   end
   
   def test_initialize
