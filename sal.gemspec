@@ -3,7 +3,7 @@ Gem::Specification.new do | s |
     s.summary       = "Analyse SAL-Code"
     s.description   = File.read(File.join(File.dirname(__FILE__), 'readme'))
     s.requirements  = [ 'An installed dictionary (most Unix systems have one)']
-    s.version       = '1.1.8'
+    s.version       = '1.1.9'
     s.author        = "Michael Ehehalt"
     s.email         = "mike42@hotmail.de"
     s.homepage      = "http://localhost:8808"
