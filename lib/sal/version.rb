@@ -147,6 +147,16 @@ module Sal
         50
       when "6.3"
         52
+      when "7.0"
+        53
+      when "7.1"
+        54
+      when "7.2"
+        55
+      when "7.3"
+        56
+      when "7.4"
+        57
       else
         raise "Version:td_to_file(#{td_version}): Version not analyzable."
       end
@@ -181,6 +191,16 @@ module Sal
         "6.2"
       when 52
         "6.3"
+      when 53
+        "7.0"
+      when 54
+        "7.1"
+      when 55
+        "7.2"
+      when 56
+        "7.3"
+      when 57
+        "7.4"
       else
         raise "Version:file_to_td(#{file_version}): Version not analyzable."
       end
@@ -220,6 +240,17 @@ module Sal
         when "\x14"   # Team Developer 6.2
           50
         when "\x16"   # Team Developer 6.3
+          52
+        when "\x16"   # Team Developer 7.0
+          53
+        when "\x16"   # Team Developer 7.1
+          54
+        when "\x16"   # Team Developer 7.2
+          55
+        when "\x16"   # Team Developer 7.3
+          56
+        when "\x16"   # Team Developer 7.4
+          57
         else
           byte = zeichen.bytes.to_a[0].to_s(16)
           raise "Version.get_from_code: Normal Mode: Version not analyzable, zeichen = #{byte}"
