@@ -33,35 +33,18 @@ end
 def info(file, files)
 
   if Sal::Format.get_from_file(file) == Sal::Format::TEXT
+  	# puts "Load file #{file}"
+  	baseName = File.basename(file)
   	code = Sal::Code.new file
-  	windows = code.windows.select { | window | window.pictab != nil }
-  	if windows.count > 0
-	  	base = Pathname.new(file).basename
-	  	baseName = File.basename(base, ".*")
-		  code.libraries.each do | lib |
-		  	libName = File.basename(lib.name, ".*")
-		  	puts "  #{baseName} -> #{libName};" if files.include? lib.name
-		  end
-	 	end
+	  code.libraries.each do | lib |
+	  	libName = File.basename(lib.name, ".*")
+	  	puts "  #{baseName} -> #{libName};" if files.include? lib.name
+	  end
 	end
   # puts code.display false
 end
 
-def files_with_quicktabs(files)
-	retval = []
-	files.each do | file |
-		code = Sal::Code.new file
-		$stderr.puts "Analyze file #{file}"
-		retval << File.basename(file).to_s if code.has_quicktabs?
-	end
-	return retval
-end
-
 # --- main program ---
-
-# ARGV << "u:\\#\\work.local\\lib\\sal\\test\\data"
-# ARGV << "/Users/me/Source/work.local/lib/sal/test/data/"
-# ARGV << "d:\\projekte\\lfv\\ffv_flstverw\\sources"
 
 if ARGV.length > 0
   arg = ARGV[0]
@@ -81,11 +64,12 @@ if ARGV.length > 0
     else
       files << arg
     end
-    quicktabFiles = files_with_quicktabs( files )
     puts "digraph {"
     puts "  layout=\"circo\";"
+    baseNameFiles = files.collect { | file | File.basename(file) }
+    puts baseNameFiles
     files.sort.each do | file |
-    	info(file, quicktabFiles)
+    	info(file, baseNameFiles)
     end
     puts "}"
   rescue StandardError => error
