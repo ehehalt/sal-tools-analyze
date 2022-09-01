@@ -92,7 +92,17 @@ module Sal
         when 50
           "\x14"  # Team Developer 6.2
         when 52
-          "\x16"  # Team Developer 6.3       
+          "\x16"  # Team Developer 6.3
+        when 53
+          "\x17"  # Team developer 7.0
+        when 54
+          "\x18"  # Team developer 7.1
+        when 55
+          "\x19"  # Team developer 7.2
+        when 56
+          "\x1A"  # Team developer 7.3
+        when 57
+          "\x1B"  # Team developer 7.4
         else
           raise "Version.to_code: Version not settable: #{@file}/#{@td}"
         end
