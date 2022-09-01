@@ -1,0 +1,55 @@
+#!/opt/local/bin/ruby
+
+require_relative '../lib/sal/version.rb'
+require_relative '../lib/sal/cdk.rb'
+
+# SalInfo reads Information from the salfile in ARGV[0]
+
+PROGVERSION = "1.0.8"
+PROGNAME = "SalConvert"
+
+def help
+	puts "#{PROGNAME} Version #{PROGVERSION}"
+	puts
+	puts "Convert a SalFile into textformat."
+	puts
+	puts "Convert c:\\temp\\example.apl to text for example:"
+	puts
+	puts "  #{PROGNAME.downcase} c:\\temp\\example.apl"
+	puts 
+	puts "Convert all SalFiles in the directory c:\\temp:"
+	puts 
+	puts "  #{PROGNAME.downcase} c:\\temp"
+	puts
+end
+
+def convert(file)
+  version = Sal::Version.from_file file
+  format = Sal::Format.get_from_file file
+  if format == Sal::Format::TEXT
+    puts "File '#{file}' is allways in text format."
+  else
+    cdk = Sal::Cdk.new version
+    cdk.convert_to_text file
+  end
+end
+
+if ARGV.length > 0
+  arg = ARGV[0]
+  begin
+    if File.directory? arg
+      # Stand Ruby 1.9.2p290: Aufgesplittet, da Dir.glob( "**/*.ap[lpt]" ) case sensitive ist und Dir.glob( "**/*.app" ) nicht. 
+      # Dir.glob( "**/*.apl" ) { | file | convert(file) }
+      # Dir.glob( "**/*.apt" ) { | file | convert(file) }
+      # Dir.glob( "**/*.app" ) { | file | convert(file) }
+      # Stand: Ruby 2.1.2
+      Dir.glob("**/*.ap{p,l,t}", File::FNM_CASEFOLD) { | file | convert(file) }
+    else
+      convert(arg)
+    end
+  rescue StandardError => error
+    puts "#{PROGNAME} - Error: #{error}"
+  end
+else
+  help
+end

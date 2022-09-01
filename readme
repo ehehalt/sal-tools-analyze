@@ -1,0 +1,124 @@
+Library for the analyze of SAL code
+
+This library gives the basic functionality to analyse Gupta source code.
+Copyright (c)2007-2015 by Michael Ehehalt
+Error and feature list at the end of the document
+
+gem build sal.gemspec
+
+--------------------------------------------------------------------------------
+
+History (versioning begins with 1.0.0 with using the gem system).
+ 
+ v1.1.8 - Sal::Item: path and path_part added
+ v1.1.7 - MiniTest changes (MiniTest::Unit::TestCase => MiniTest::Test, etc.)
+ 				- TestQuickTabsAnalyse added
+ 				-	Sal::Window added, with test and property windows in Sal::Code
+ 				- SalPicTabInfo added
+ 				- SalDepend added
+ v1.1.6 - Bugfixes
+ v1.1.5 - Compiler added. Compiles app files to exe and apl/apt files to apds.
+          Version modified to return cdk_dll and cbi_exe for the current version.
+          Cdk modified to use the cdk_dll from Version and not build this manually. 
+ v1.1.4 - CodeSearcher.fileinclude_allways added, to add file includes if no search was successfull.
+ v1.1.3 - ErrorLog and Error added, to analyse the error file after a failed build
+ v1.1.2 - SalAnalyse added in version 1.0.0
+          SalConvert changed to version 1.0.8 (Dir.glob changed)
+          SalSearch changed to version 1.0.8 (Dir.glob changed)
+          Analyse with unit tests added (base of SalAnalyse)
+ v1.1.1 - Code and CodeSearcher support parts (:all, :lib, :ver)
+ v1.1.0 - Use Fiddle for Ruby >= 2.0.0 and DL for Ruby < 2.0.0 (need for CBICDK)
+ v1.0.9 - Read file/File format
+ v1.0.8 - SalConvert fixed
+ v1.0.7 - Constants added, 
+          SalConvert use dynamic the right cdk dll (fails with TD >= 5.0)
+          StringProperty and StringPropertyAnalyzer added
+ v1.0.6 - Indent support removed, fixed things
+ v1.0.5 - AppStartup enhancements
+ v1.0.4 - Filesearcher includes now a blacklistfilter, fixed things
+ v1.0.3 - CodeSearcher added, fixed things
+ v1.0.2 - Filesearcher added, fixed things
+ v1.0.1 - Version refactored
+ v1.0.0 - Using Gem system, added unit test, fixed things
+
+--------------------------------------------------------------------------------
+
+Development
+- stringproperties.rb: 
+  - class StringPropertyAnalyzer
+    - VIEWINFO befindet sich im Einbau (Alpha)
+      - Schon eingebaut: VIEWINFO
+    - MAKERUNDLG befindet sich im Einbau (Alpha)
+      - Schon eingebaut: DT_MAKERUNDLG, SEP_MAKE_ASCII, SEP_MAKE_UTF16, SEPS_MAKE
+
+Todo
+
+ Todo:
+ - item > path like the c# variant
+
+ Todo Active:
+ - salsearch yaml file should be easier
+ - salanalyze as tool, with parameters -s == sqlporter check
+
+ Prio Minor:
+ - support of indented text
+ - add functionality to externalfunction.rb
+ - add tests
+ - add binaries
+
+ Prio Major:
+ - add single require => require "sal" that includes all code
+ - binary: salcreatealllib
+ - save code to file => UTF8/UTF-16LE/ANSI
+
+ Code.rb
+ - indented has to be improved (for siemens project, only on textmode worked)
+
+--------------------------------------------------------------------------------
+
+Changes in 1.0.5
+(app_startup_item)
+- code.rb: def app_startup_item - complete new
+- test_code.rb: @files_appstartup - new in setup, test_app_startup_item - new test
+- test.21.text.appstartup.app - complete new
+- item.rb:  def insert_new_child - complete new
+- test_item.rb: 
+
+
+Error and feature list:
+
+#0007 - Fixed in #1.0.1
+		TDVersion and FileVersion removed by Version
+		FileFormat moved to Format
+
+#0006 - Fixed in #1.0.0
+		Code moved to Sal::Code
+		FileVersion has new functions (set_to_file, ...)
+		New Binary SalInfo
+		Tests incuded now
+		Using gem build system
+
+#0005 - Added in #1.0.0
+		ExternalFunction properties: ordinal, parameters
+		ExternalLibrary property: commented?
+
+#0004 - New Feature in #0.4.0
+		Code::libraries
+		Library class
+
+#0003 - Fixed in #0.3.0
+		Code::_read_sourcecode_in_line_array
+		splitter = ".head" --> splitter = ".head "
+		The wrong defined splitter crashs in a line like this: 
+		" ... and sv.header = 0"
+
+#0002 - Fixed in #0.2.0
+		Code::external_functions
+		External functions of commented external libraries should
+		not analyzed. In version #2.1 this interrupts the program
+
+#0001 - Fixed in #0.1.0
+		Code::external_functions
+		Comments in functionnames are combined with functionname
+		Example: .head 4 +  Function: ReportEventA ! funktioniert
+		Results: Functionname: ReportEventA ! funktioniert

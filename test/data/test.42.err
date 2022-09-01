@@ -1,0 +1,27 @@
+GUPTA SQLWindows Error Log
+
+ Application File: D:\Projekte\Galilei\trunk\ported\GCRS Sources and Executables\301_ErrView.apl
+
+--- Begin Error Output ---
+
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+Please be reminded that this application has been generated from Unregistered / NFR Team Developer.  Applications generated from Unregistered / NFR Team Developer cannot be deployed.
+
+Source: Set hWndDateTimeF = SalCreateWindowEx( frmDF_DateTime, hParent, nLeft, nTop, nW, nH, CREATE_AsChild, hWndItem,nColor) 
+	Position: 49 	 Error: Symbol is undefined or unable to be referenced from current location: frmDF_DateTime
+
+Source: Call GalExcelExportDialog( hWndForm, strText, 0, sUserINIFileName, sGHSini_FileName, sGhsMSGFileName, sGhsMSG_Hint_FileName, strText ) 
+	Position: 20 	 Error: Undefined function: GalExcelExportDialog
+
+
+--- End Error Output  ---

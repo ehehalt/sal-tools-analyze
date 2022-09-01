@@ -1,0 +1,129 @@
+#!/opt/local/bin/ruby
+
+require 'pp'
+require 'pathname'
+
+require_relative '../lib/sal/code.rb'
+require_relative '../lib/sal/search.rb'
+require_relative '../lib/sal/analyse.rb'
+
+# SalAnalyse has predefined analyse searchs for special themes
+
+# Todo:
+#   * Kurzausgabe, Langausgabe mit Codezeilen, Markdownausgabe, ...
+
+PROGVERSION = "1.0.0"
+PROGNAME = "SalAnalyse"
+
+def help
+	puts "#{PROGNAME} Version #{PROGVERSION}"
+	puts
+	puts "Analyse of a file or the files in a directory."
+	puts "There are predefined searchs for special themes."
+	puts
+	puts "Examples:"
+	puts
+	puts "Analyse a directory for all Gupta SQL Commands:"
+	puts
+	puts "  #{PROGNAME.downcase} -s c:\\temp"
+	puts
+end
+
+def get_pattern(mode)
+	mode = mode.start_with?("-") ? mode[1..-1] : mode
+	# data = DATA.read # don't run in a gem binary
+	data = File.read(__FILE__).split(/^__END__/, 2).last
+	lines = data.lines
+	lines = lines.map { | line | line.chomp }
+	pattern = lines.select { | line | line.start_with?(mode) }
+	pattern = pattern.map { | p | p[2..-1] }
+end
+
+
+def analyse(dir, pattern)
+	a = Sal::Analyse.new
+
+    a.file_searcher.dirs << dir
+
+    pattern.each do | function |
+    	a.search_pattern << Sal::SearchPattern.new(/\b#{function}\b/, nil, Sal::SearchType::CODE, Sal::SearchFunction::SEARCH)
+    end
+
+    statistic = a.statistic
+    # pp statistic
+
+    pattern.sort.each do | p |
+    	result = statistic.select { | s | s.search_pattern.search =~ p }
+    	count = (result != nil and result.count >= 1) ? result[0].results.count : 0
+    	puts "#{p}: #{count}"
+    end
+end
+
+ARGV << "-s"
+ARGV << "/Users/me/Source/work.local/Sal/BB15"
+
+if ARGV.length > 0
+	mode = ARGV[0]
+	pattern = get_pattern(mode)
+	dir  = ARGV.length > 1 ? ARGV[1] : Dir.pwd
+	if(pattern.count == 0)
+		puts "There aren't search pattern for mode '-#{mode}' predefined."
+	else
+		begin
+			statistic = analyse(dir, pattern)
+		rescue StandardError => error
+			puts "#{PROGNAME} - Error: #{error}"
+		end
+	end
+else
+	help
+end
+
+__END__
+s:SqlClearImmediate
+s:SqlClose
+s:SqlCommit
+s:SqlConnect
+s:SqlContextClear
+s:SqlContextSet
+s:SqlContextSetToForm
+s:SqlDirectoryByName
+s:SqlDisconnect
+s:SqlDropStoredCmd
+s:SqlError
+s:SqlErrorText
+s:SqlExecute
+s:SqlExecutionPlan
+s:SqlExists
+s:SqlExtractArgs
+s:SqlFetchNext
+s:SqlFetchPrevious
+s:SqlFetchRow
+s:SqlGetError
+s:SqlGetErrorPosition
+s:SqlGetErrorText
+s:SqlGetErrorTextX
+s:SqlGetModifiedRows
+s:SqlGetParameter
+s:SqlGetParameterAll
+s:SqlGetResultSetCount
+s:SqlGetRollbackFlag
+s:SqlImmediate
+s:SqlImmediateContext
+s:SqlOpen
+s:SqlPLSQLCommand
+s:SqlPrepare
+s:SqlPrepareAndExecute
+s:SqlRetrieve
+s:SqlSetInMessage
+s:SqlSetIsolationLevel
+s:SqlSetLockTimeout
+s:SqlSetLongBindDatatype
+s:SqlSetOutMessage
+s:SqlSetParameter
+s:SqlSetParameterAll
+s:SqlSetResultSet
+s:SqlStore
+s:SqlVarSetup
+s:SalTblPopulate
+s:SalListPopulate

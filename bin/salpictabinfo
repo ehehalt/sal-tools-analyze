@@ -1,0 +1,106 @@
+#!/opt/local/bin/ruby
+
+require 'pathname'
+require_relative '../lib/sal/code.rb'
+
+# SalInfo reads Information from the salfile in ARGV[0]
+
+PROGVERSION = "0.0.1"
+PROGNAME = "SalPicTabInfo"
+
+# --- functions ---
+
+def help
+	puts "#{PROGNAME} Version #{PROGVERSION}"
+	puts
+	puts "Analyses a SalFile and returns the picTab infos found in the file:"
+	puts
+	puts "# Filename"
+	puts "## Window Name"
+	puts "### Tab Name"
+	puts "* assosiated child"
+	puts
+	puts "Check c:\\temp\\example.apl for example:"
+	puts
+	puts "  #{PROGNAME.downcase} c:\\temp\\example.apl"
+	puts 
+	puts "Check all SalFiles in the directory c:\\temp:"
+	puts 
+	puts "  #{PROGNAME.downcase} c:\\temp"
+	puts
+end
+
+def info(file)
+
+  if Sal::Format.get_from_file(file) == Sal::Format::TEXT
+  	puts "# #{File.basename(file)}"
+  	code = Sal::Code.new file
+	  windows = code.windows.select { | window | window.pictab != nil }
+	  windows.sort{ | w1, w2 | w1.name <=> w2.name }.each do | window |
+	  	puts
+	  	puts "## #{window.name}"
+  		puts
+  		puts "__picTab Tab Names:__"
+  		puts
+	  	tabs = Hash.new
+	  	window.pictab.tab_names.each { | tab_name | puts "* #{tab_name}" }
+	  	puts
+	  	puts "__Contents:__"
+	  	puts
+	  	window.contents.each do | item |
+	  	 	if item.tab_names != nil
+	  			item.tab_names.each do | tab_name | 
+						tabs[tab_name] = [] unless tabs.keys.member? tab_name
+						tabs[tab_name] << item 
+	  			end
+	  	 	end
+	  	end
+	  	tabs.keys.sort.each do | tab |
+	  		puts "### #{tab}"
+	  		puts if tabs[tab].count > 0
+	  		tabs[tab].each do | item |
+	  			puts " * #{item.code}"
+	  		end
+	  		puts if tabs[tab].count > 0
+	  	end
+
+	  end
+	end
+  # puts code.display false
+end
+
+# --- main program ---
+
+# ARGV << "u:\\#\\work.local\\lib\\sal\\test\\data"
+# ARGV << "/Users/me/Source/work.local/lib/sal/test/data/"
+# ARGV << "d:\\projekte\\lfv\\ffv_flstverw\\sources"
+
+if ARGV.length > 0
+  arg = ARGV[0]
+  begin
+  	files = []
+    if File.directory? arg
+    	pwd = Dir.pwd
+    	Dir.chdir arg
+    	dir = Pathname.new(arg)
+		  # aufgesplittet, da Dir.glob( "**/*.ap[lpt]" ) case sensitive ist und Dir.glob( "**/*.app" ) nicht. Stand Ruby 1.9.2p290.
+	    # Problem existiert unter Ruby 2.2.3 (Windows) nicht mehr.
+	    Dir.glob( "**/*.app" ) { | file | files << (dir + Pathname.new(file)).to_s }
+		  Dir.glob( "**/*.apl" ) { | file | files << (dir + Pathname.new(file)).to_s }
+		  Dir.glob( "**/*.apt" ) { | file | files << (dir + Pathname.new(file)).to_s }
+
+		  Dir.chdir pwd
+    else
+      files << arg
+    end
+    files.sort.each do | file |
+    	info file
+    end
+  rescue StandardError => error
+    puts "#{PROGNAME} - Error: #{error}"
+    puts error.backtrace
+  end
+else
+  help
+end
+

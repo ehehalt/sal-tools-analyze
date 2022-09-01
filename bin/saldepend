@@ -1,0 +1,98 @@
+#!/opt/local/bin/ruby
+
+require 'pathname'
+require_relative '../lib/sal/code.rb'
+
+# SalDepend analyses file include depends between files
+
+PROGVERSION = "0.0.1"
+PROGNAME = "SalDepend"
+
+# --- functions ---
+
+def help
+	puts "#{PROGNAME} Version #{PROGVERSION}"
+	puts
+	puts "Analyses SalFiles and returns file include dependencies in the file(s):"
+	puts
+	puts "# Filename"
+	puts "## Window Name"
+	puts "### Tab Name"
+	puts "* assosiated child"
+	puts
+	puts "Check c:\\temp\\example.apl for example:"
+	puts
+	puts "  #{PROGNAME.downcase} c:\\temp\\example.apl"
+	puts 
+	puts "Check all SalFiles in the directory c:\\temp:"
+	puts 
+	puts "  #{PROGNAME.downcase} c:\\temp"
+	puts
+end
+
+def info(file, files)
+
+  if Sal::Format.get_from_file(file) == Sal::Format::TEXT
+  	code = Sal::Code.new file
+  	windows = code.windows.select { | window | window.pictab != nil }
+  	if windows.count > 0
+	  	base = Pathname.new(file).basename
+	  	baseName = File.basename(base, ".*")
+		  code.libraries.each do | lib |
+		  	libName = File.basename(lib.name, ".*")
+		  	puts "  #{baseName} -> #{libName};" if files.include? lib.name
+		  end
+	 	end
+	end
+  # puts code.display false
+end
+
+def files_with_quicktabs(files)
+	retval = []
+	files.each do | file |
+		code = Sal::Code.new file
+		$stderr.puts "Analyze file #{file}"
+		retval << File.basename(file).to_s if code.has_quicktabs?
+	end
+	return retval
+end
+
+# --- main program ---
+
+# ARGV << "u:\\#\\work.local\\lib\\sal\\test\\data"
+# ARGV << "/Users/me/Source/work.local/lib/sal/test/data/"
+# ARGV << "d:\\projekte\\lfv\\ffv_flstverw\\sources"
+
+if ARGV.length > 0
+  arg = ARGV[0]
+  begin
+  	files = []
+    if File.directory? arg
+    	pwd = Dir.pwd
+    	Dir.chdir arg
+    	dir = Pathname.new(arg)
+		  # aufgesplittet, da Dir.glob( "**/*.ap[lpt]" ) case sensitive ist und Dir.glob( "**/*.app" ) nicht. Stand Ruby 1.9.2p290.
+	    # Problem existiert unter Ruby 2.2.3 (Windows) nicht mehr.
+	    Dir.glob( "**/*.app" ) { | file | files << (dir + Pathname.new(file)).to_s }
+		  Dir.glob( "**/*.apl" ) { | file | files << (dir + Pathname.new(file)).to_s }
+		  Dir.glob( "**/*.apt" ) { | file | files << (dir + Pathname.new(file)).to_s }
+
+		  Dir.chdir pwd
+    else
+      files << arg
+    end
+    quicktabFiles = files_with_quicktabs( files )
+    puts "digraph {"
+    puts "  layout=\"circo\";"
+    files.sort.each do | file |
+    	info(file, quicktabFiles)
+    end
+    puts "}"
+  rescue StandardError => error
+    puts "#{PROGNAME} - Error: #{error}"
+		puts error.backtrace
+  end
+else
+  help
+end
+

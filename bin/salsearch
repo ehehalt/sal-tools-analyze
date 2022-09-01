@@ -1,0 +1,199 @@
+#!/opt/local/bin/ruby
+
+require 'yaml'
+require 'pathname'
+
+require_relative '../lib/sal/code.rb'
+require_relative '../lib/sal/search.rb'
+
+# SalSearch replaces things in sal code.
+
+PROGVERSION = "1.0.8"
+PROGNAME = "SalSearch"
+
+module Sal
+
+  class Config
+    
+    attr_accessor :src_dir, :dst_dir
+    attr_accessor :search_pattern, :replace_pattern
+    attr_accessor :backup_code, :backup_info
+    attr_accessor :pattern
+    
+    def initialize
+      @src_dir = Dir.pwd
+      @dst_dir = Dir.pwd
+      @backup_code = true
+      @backup_info = "Code changed at 21.09.2011"
+      @pattern = []
+      @pattern << Sal::SearchPattern.new(/Sql(Prepare|Commit)/, 'Fql\1', Sal::SearchType::CODE)
+      @pattern << Sal::SearchPattern.new(/Sql(Exist)/, 'Fql\1', Sal::SearchType::COMPLETE)
+      @pattern << Sal::SearchPattern.new(/Template/, 'Non Template', Sal::SearchType::COMMENTS)
+    end
+    
+    def save(filename)
+      Config::save(filename, self)
+    end
+    
+    def Config::save(filename, object)
+      data = YAML.dump object
+      File.open(filename, "w+") do | file |
+        file.write(data)
+      end
+    end
+    
+    def Config::load(filename)
+      data = nil
+      File.open(filename) do | file |
+        data = file.read
+      end
+      YAML.load data
+    end
+    
+    def get_files
+      cur_dir = Dir.pwd
+      Dir.chdir src_dir
+      # Ruby 2.1.2 Version
+      files = Dir.glob("**/*.ap{p,l,t}", File::FNM_CASEFOLD)
+      # aufgesplittet, da Dir.glob( "**/*.ap[lpt]" ) case sensitive ist und Dir.glob( "**/*.app" ) nicht. Stand Ruby 1.9.2p290.
+      # Dir.glob("**/*.app") { | file | files << file }
+      # Dir.glob("**/*.apl") { | file | files << file }
+      # Dir.glob("**/*.apt") { | file | files << file }
+      Dir.chdir cur_dir
+      pn = Pathname.new(src_dir)
+      files = files.collect { |file| pn.join(file).to_s }
+    end
+    
+    def work_with_file(file = nil, replacemode = false, testmode = false)
+      code = Sal::Code.new file
+      if code.format == Sal::Format::TEXT
+        
+        searcher = Sal::Search.new code.items
+        
+        searcher.pattern = pattern
+        searcher.backup_code = backup_code
+        searcher.backup_info = backup_info
+        
+        results = searcher.search(replacemode, testmode)
+        
+        puts "  => #{code.display} - #{results.count} results" if testmode or results.count > 0
+        results.each do | result |
+          puts "     src => #{result.src.code}"
+          puts "     dst => #{result.dst.code}" if replacemode
+        end
+        
+        if(replacemode and (testmode == false) and results.count > 0)
+          if check_dst_dir dst_dir
+            pn = Pathname.new(dst_dir)
+            new_filename = pn.join File.basename(file)
+            code.save_as new_filename
+          end
+        end
+      else
+        puts "  => #{code.display} - 0 results" if testmode
+        warn "     - Search only in Textmode code!" if testmode
+      end
+    end
+    
+    def search(testmode = false)
+      print_header
+      get_files.each do | file |
+        work_with_file( file, false, testmode )
+      end
+      puts
+    end
+    
+    def replace(testmode = false)
+      print_header
+      get_files.each do | file |
+        work_with_file( file, true, testmode )
+      end
+      puts
+    end
+    
+    def test
+      replace(true)
+      puts
+      puts "search- and replace-pattern not tested in this program version"
+      puts
+    end
+    
+    def print_header
+      puts
+      print "    src_dir: '#{src_dir}' "
+      print (Dir.exist?(src_dir) ? "exist" : "not found")
+      puts
+      print "    dst_dir: '#{dst_dir}' "
+      print (Dir.exist?(dst_dir) ? "exist" : "not found")
+      puts
+      puts
+      @pattern.each do | pattern |
+        puts "  srch/replc: #{pattern.search} => #{pattern.replace}"
+      end
+      puts
+    end
+    
+    def check_dst_dir(dst_dir)
+      retval = true
+      unless Dir.exist? dst_dir
+        begin
+          Dir.mkdir dst_dir
+        rescue SystemCallError
+          warn "! Destination directory can't create: #{dst_dir}"
+          retval = false
+        end
+      end
+      return retval
+    end
+    
+  end
+
+end   
+
+def help
+	puts "#{PROGNAME} Version #{PROGVERSION}"
+	puts
+	puts "Search and replace things in SalFiles."
+	puts "The replaces are only in the code part of the SalFiles."
+	puts "The original lines can be left in code as comment line."
+	puts
+	puts "The program is controlled by config files in yaml format."
+	puts
+	puts "  #{PROGNAME.downcase} -c test.yaml      # => creates a yaml file with defaultvalues"
+	puts "  #{PROGNAME.downcase} -s test.yaml      # => searches things in SalFiles"
+	puts "  #{PROGNAME.downcase} -r test.yaml      # => replace things in SalFiles"
+	puts "  #{PROGNAME.downcase} -t test.yaml      # => test config file and environment"
+	puts
+end
+
+if(ARGV.length > 1 and ARGV[0].start_with?("-"))
+  cmd = ARGV[0][1..-1]
+  arg = ARGV[1]
+  begin
+    case cmd
+    when "c"
+      config = Sal::Config.new
+      config.save arg
+      puts "#{PROGNAME} - Info: yaml config file '#{arg}' created."
+    when "s"
+      puts "#{PROGNAME} - Info: search with config file '#{arg}' started ..."
+      config = Sal::Config.load arg
+      config.search
+    when "r"
+      puts "#{PROGNAME} - Info: replace with config file '#{arg}' started ..."
+      config = Sal::Config.load arg
+      config.replace
+    when "t"
+      puts "#{PROGNAME} - Info: test replace with config file '#{arg}' started ...."
+      config = Sal::Config.load arg
+      config.test
+    else
+      help
+    end  
+  rescue StandardError => error
+    warn "#{PROGNAME} - Error: #{error}"
+  end
+else
+  help
+end
+

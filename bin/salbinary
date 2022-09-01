@@ -1,0 +1,46 @@
+#!/opt/local/bin/ruby
+
+require 'pp'
+require 'pathname'
+
+require_relative '../lib/sal/code.rb'
+require_relative '../lib/sal/search.rb'
+require_relative '../lib/sal/analyse.rb'
+
+# SalBinary returns the binary content in a readable format
+
+PROGVERSION = "0.0.1"
+PROGNAME = "SalBinary"
+
+def help
+	puts "#{PROGNAME} Version #{PROGVERSION} Alpha"
+	puts
+	puts "Analyse the binaries of a file or the files in a directory."
+	puts
+end
+
+def info(file)
+	code = Sal::Code.new file
+  code.items.each do | item |
+  	pi = item.property_analyzer
+  	if pi != nil and pi.data != "\r\n"
+  		pp pi
+  	end
+  end
+end
+
+if ARGV.length > 0
+  arg = ARGV[0]
+  pp arg
+  begin
+    if File.directory? arg
+    	puts "#{PROGNAME} dont support directories at the moment"
+    else
+      info arg
+    end
+  rescue StandardError => error
+    puts "#{PROGNAME} - Error: #{error}"
+  end
+else
+  help
+end

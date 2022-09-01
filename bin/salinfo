@@ -1,0 +1,51 @@
+#!/opt/local/bin/ruby
+
+require_relative '../lib/sal/code.rb'
+
+# SalInfo reads Information from the salfile in ARGV[0]
+
+PROGVERSION = "1.0.7"
+PROGNAME = "SalInfo"
+
+def help
+	puts "#{PROGNAME} Version #{PROGVERSION}"
+	puts
+	puts "Analyses a SalFile and returns the info about the file:"
+	puts
+	puts "  - TD Version"
+	puts "  - Outline Version"
+	puts "  - ..."
+	puts
+	puts "Check c:\\temp\\example.apl for example:"
+	puts
+	puts "  #{PROGNAME.downcase} c:\\temp\\example.apl"
+	puts 
+	puts "Check all SalFiles in the directory c:\\temp:"
+	puts 
+	puts "  #{PROGNAME.downcase} c:\\temp"
+	puts
+end
+
+def info(file)
+  code = Sal::Code.new file
+  puts code.display false
+end
+
+if ARGV.length > 0
+  arg = ARGV[0]
+  begin
+    if File.directory? arg
+		  # aufgesplittet, da Dir.glob( "**/*.ap[lpt]" ) case sensitive ist und Dir.glob( "**/*.app" ) nicht. Stand Ruby 1.9.2p290.
+	    # Problem existiert unter Ruby 2.2.3 (Windows) nicht mehr.
+	    Dir.glob( "**/*.app" ) { | file | info file }
+		  Dir.glob( "**/*.apl" ) { | file | info file }
+		  Dir.glob( "**/*.apt" ) { | file | info file }
+    else
+      info arg
+    end
+  rescue StandardError => error
+    puts "#{PROGNAME} - Error: #{error}"
+  end
+else
+  help
+end
