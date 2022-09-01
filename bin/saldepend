@@ -37,7 +37,7 @@ def info(file, files)
   	baseName = File.basename(file)
   	code = Sal::Code.new file
 	  code.libraries.each do | lib |
-	  	libName = File.basename(lib.name, ".*")
+	  	libName = File.basename(lib.name)
 	  	puts "  #{baseName} -> #{libName};" if files.include? lib.name
 	  end
 	end
