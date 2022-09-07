@@ -1,0 +1,16 @@
+# EditorConfig for sal-tools-analyze
+
+root = true
+
+[*.rb]
+indent_style = space
+indent_size = 2
+charset = utf-8
+end_of_line = crlf
+
+[*.bat]
+end_of_line = crlf
+
+[*.sh]
+end_of_line = lf
+

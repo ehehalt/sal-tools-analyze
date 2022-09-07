@@ -1,6 +1,5 @@
 # coding: utf-8
 
-
 require_relative 'codesearcher'
 require_relative 'filesearcher'
 require_relative 'searchpattern'
