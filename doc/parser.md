@@ -2,7 +2,7 @@
 
 ## LineParser
 
-Parst die Zeilen des Sourcecodes. Trenner ist das "Newline außerhalb eines Textes". Varianten sind z. B.
+Parses the sourcecode lines. Splitter is the "newline" outside of a string. Samples are ...
 
 __Properties__
 
@@ -54,7 +54,3 @@ __Sourcecode__
 ```
 
 * "If hWndCol = hWndNULL" = Code
-
-Befehlswörter (zur Code Erkennung):
-
-* 

@@ -24,12 +24,10 @@ module Sal
     end
   end
   
-  # Die Klasse Code repräsentiert den kompletten Quellcode einer Gupta Datei.
-  # Man  kann sich über die items durch den Quellcode navigieren oder über
-  # die libraries, external_libraries, usw. ...
-  # Der Quellcode wird automatisch analysiert. Die tiefe Analyse kann beim initialize
-  # über den zweiten (optionalen) Parameter auch ausgeschaltet werden um für
-  # kleinere Tests (welches Dateiformat hat eine Datei, etc.) Zeit zu sparen.
+  # The class Code represents the complete sourcecode of a Gupta file.
+  # The sourcecode is automatically analyzed. The deep analyze could be
+  # deactivated with the second (optional) parameter, to save time in 
+  # smaller tests (analyze the file format, ...).
   class Code
     
     # Initialize Code with filename
@@ -65,7 +63,7 @@ module Sal
       @items
     end
 	
-  	# Constants werden erst analysiert, wenn sie benötigt werden	
+  	# Constants analyzed lazy
   	def constants
   	  if @constants.nil?
   	    @constants = Array.new
@@ -93,7 +91,7 @@ module Sal
   	  constants.find_all { |  constant | constant.user? }
   	end
     
-    # Libraries werden erst analysiert, wenn sie benötigt werden
+    # Libraries analyzed lazy
     def libraries
       if @libraries.nil?
         @libraries = Array.new
@@ -106,7 +104,7 @@ module Sal
       return @libraries
     end
     
-	  # Fügt eine neue Library unter File Include ein
+	  # Add a new library under "File Include"
     def add_library(filename)
       # .head 1 +  Libraries
       # .head 2 -  File Include: qckttip.apl
@@ -128,7 +126,7 @@ module Sal
       end
     end
 
-    # Gibt das On SAM_AppStartup Item zurück, falls es existiert, ansonsten nil
+    # Returns the "On SAM_AppStartup Item" back, if it exists, otherwise returns nil
     def app_startup_item
       # .head 2 +  Application Actions
       # .head 3 +  On SAM_AppStartup
@@ -141,7 +139,7 @@ module Sal
       return nil
     end
   
-    # Externals werden erst analysiert, wenn sie benötigt werden
+    # Externals analyzed lazy
     def externals
       if @externals.nil?
         @externals = Array.new
@@ -154,7 +152,7 @@ module Sal
       return @externals
     end
     
-    # Classes werden erst analysiert, wenn sie benötigt werden
+    # Classes analyzed lazy
     def classes
       if @classes.nil?
         @classes = []
@@ -167,7 +165,7 @@ module Sal
       return @classes
     end
   
-    # Fenster werden erst analysiert, wenn sie benötigt werden
+    # Windows analyzed lazy
     def windows
       if @windows.nil?
         wndw_items = items.select do | item | 
@@ -189,7 +187,7 @@ module Sal
       @file_name
     end
     
-    # Gibt den aktuellen Code zurück, der in den Items hinterlegt ist
+    # Returns the current code from the items
     def generated_code
       new_code = ""
       items.each do | item |
@@ -206,7 +204,7 @@ module Sal
       disp += "Format = #{@format}"
     end
     
-    # Entfernt ein Item inklusive der Childs und deren Childs und ...
+    # Removes an item with his childs
     def remove_item(item = nil)
       unless item.nil?
         item.parent.childs.delete(item) unless item.parent.nil?
@@ -219,21 +217,20 @@ module Sal
     
   private
     
-    # Schreibt den Quellcode zurück auf die Festplatte
+    # Writes the source code to a file.
     def save_code_to_file(new_filename)
       fh = File.new(new_filename, "wb")
       fh.write( items.join )
       fh.close
     end
     
-    # Ermittelt das Format (Normal, Text, Indented) und die Verison
+    # Analyze the format (Normal, Text, Indented) and the version of the file
     def get_format_and_version_from_code
       @format = Format::get_from_code @code
       @version = Version::from_code @code
     end
     
-    # Erzeugt das @items Array und ruft je nach Format
-    # die entsprechende Analyse Funktion auf.
+    # Creates the @items array and analyze it
     def get_items_from_code
       @items = []
       case format
@@ -249,9 +246,7 @@ module Sal
       end
     end
     
-    # Analysiert den Quellcode
-    # Parameter format ist eigentlich überflüssig, 
-    # aber falls doch einmal indented analysiert werden sollte ...
+    # Analyze the source code
     def analyze_items(format)
       vars = analyze_init(format)
       get_lines(vars)
@@ -263,10 +258,7 @@ module Sal
       end
     end
     
-    # Initialisierung der Analyse. 
-    # Es wird für den Datenaustausch ein OpenStruct
-    # verwendet in dem die Informationen automatisch
-    # zugeordnet werden können.
+    # Analyze init, uses for data transfer an OpenStruct object.
     def analyze_init(format)
       @items = Array.new
       vars = OpenStruct.new
@@ -276,7 +268,7 @@ module Sal
       return vars
     end
     
-    # Der Quellcode wird in Zeilen gesplittet
+    # Split the source code in code lines
     def get_lines(vars)
       vars.lines = []
       if(vars.format == Format::TEXT)
@@ -309,7 +301,7 @@ module Sal
       vars.lines
     end
     
-    # Hieran ist noch zu arbeiten um auch Indented zu unterstützen
+    # TODO: Support Indented code
     def get_item(vars)
       # item = Item.new vars.line, vars.format
       if(vars.format == Format::TEXT)
@@ -326,7 +318,7 @@ module Sal
           pp item
         end
       end
-      vars.counter += 1 # Bei Textmode war vorher: item_counter = item_counter + code_line.split('\n').length
+      vars.counter += 1 # In textmode was: item_counter = item_counter + code_line.split('\n').length
       item
     end  
     

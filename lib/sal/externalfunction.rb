@@ -5,8 +5,7 @@ require_relative "external.rb"
 
 module Sal
  
-  # Diese Klasse representiert eine Externe Funktion innerhalb einer
-  # Externen Bibliothek (DLL).
+  # External function in an external library (DLL)
   class ExternalFunction
 
     def initialize( external, item )

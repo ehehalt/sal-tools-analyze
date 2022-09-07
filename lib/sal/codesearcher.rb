@@ -24,9 +24,9 @@ module Sal
       @parts = parts
     end
     
-    # destination = destination directory, wenn nicht angegeben, werden die dateien überschrieben
+    # destination = destination directory, if not set: override the source files
     attr_accessor :filesearcher, :searchpattern, :destination
-    # fileinclude_allways == true bedeutet: Egal ob in der Datei ein Searchpattern funktioniert hat oder nicht: File Inlcudes werden eingebaut
+    # fileinclude_allways == true means: If searchpattern was successful or not: Add the "File Inlcudes"
     attr_accessor :fileinclude, :fileinclude_comment, :fileinclude_allways
     attr_accessor :app_startup_code, :app_startup_code_comment
     
@@ -59,7 +59,7 @@ module Sal
       return work options
     end
     
-    # Fügt code zum app_startup hinzu, falls der app_startup vorhanden ist)
+    # Add code to "app_startup", if "app_startup" exists
     def add_app_startup_code(code=nil)
       @app_startup_code << code unless code.nil?
     end
@@ -132,9 +132,9 @@ module Sal
       return result_all
     end
     
-    # Der Kommentar wird unter dem Item angelegt
-    # parent = das parent item unter dem der Kommentar als Item eingefügt werden soll
-    # info = der text der als Code-Teil im Item zu sehen ist 
+    # The comment would inserted under the item
+    # parent = the parent item under them the comment would inserted
+    # info = the text that can be seen as a code part in the item
     def item_write_comment(code, parent, info)
       comment_item = parent.copy
       comment_item.parent = parent

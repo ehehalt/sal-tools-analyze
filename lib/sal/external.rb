@@ -4,7 +4,7 @@ require_relative "item.rb"
 
 module Sal
   
-  # Die Klasse representiert eine eingebundene Externe Bibliothek (DLL).
+  # This class represent an external library (DLL)
   class External
 
     def initialize( item )
@@ -15,7 +15,7 @@ module Sal
 
     attr_accessor :name, :item
 
-    # Functions werden erst analysiert, wenn sie benötigt werden
+    # Functions analyzed lazy
     def functions
       if( @functions.nil? )            
         _analyze            

@@ -4,15 +4,12 @@ require_relative "format"
 
 module Sal
 
-  # Die Version Klasse beinhaltet die Information zur Team Developer Version und
-  # zur entsprechenden File Version. Sie analysiert anhand des Codes auch die
-  # entsprechenden Versionen.
-  # Zusätzlich kann die File Version im Quellcode auch verändert. werden.
+  # The version class analyze the Team Developer version of the file.
+  # It converts file versions to Team Developer version and vice versa.
+  # The class could additionaly change a version in a given source file.
   class Version
     
-    # Die Version kann mit der Fileversion oder der TD Version initialisiert
-    # werden. Das initialize analysiert den Punkt in der TD Version um zu erkennen
-    # mit welcher Version es zu tun hat.
+    # The version could be initialized with the file version or the td version.
     def initialize(version)
       if(version.to_s.include? ".")
         @td = version
@@ -25,14 +22,12 @@ module Sal
     
     attr_accessor :td, :file
     
-    # Die Version anhand des Codes ermitteln und ein vorbelegtes Version-Objekt
-    # zurückgeben. Siehe auch Version.from_file
+    # Get the version from the code and return a version object.
     def Version.from_code(code)
       Version.new(self.file_version_from_code(code))
     end
     
-    # Die Version anhand der Datei ermitteln und ein vorbelegtes Version-Objekt
-    # zurückgeben. Siehe auch Version.from_code
+    # Get the version from the file and return a version object.
     def Version.from_file(filename)
       code = CodeHelper.read_code_from_file filename
       Version.from_code code
@@ -46,12 +41,8 @@ module Sal
       dll = "cdki#{td.sub(/\./,"")}.dll"
     end
 
-    # Setzt die Fileversion der Datei
-    #
-    # Es wird ansonsten im Quellcode nichts geändert, so dass der Quellcode
-    # dann vom Quellcode geöffnet werden kann dessen Version eingestellt ist,
-    # es aber erst einmal Fehler geben kann, weil Elemente enthalten sind,
-    # welche vom entsprechenden Team Developer nicht unterstützt werden.
+    # Set the fileversion of the file
+    # Nothing else would be changed in the code.
     def to_file(filename) 
       code = IO.binread filename
       code = to_code(code, @file)
@@ -60,8 +51,7 @@ module Sal
       f.close
     end
     
-    # Ändert im übergebenen Quellcode die Fileversion in die übergebene
-    # Fileversion um.
+    # Change the file version in the new one in the source code
     def to_code(code)
       format = Format.get_from_code code
       if format == Format::NORMAL
@@ -112,7 +102,7 @@ module Sal
       code
     end
     
-    # Die TD Version in die entsprechende File Version umwandeln.
+    # Convert the td version to the file version
     def Version.td_to_file(td_version)
       case td_version
       when "1.1"
@@ -162,7 +152,7 @@ module Sal
       end
     end
     
-    # Die File Version in die ensprechende TD Version umwandeln
+    # Convert the file version to the td version
     def Version.file_to_td(file_version)
       case file_version
       when 26
@@ -208,7 +198,7 @@ module Sal
     
   private
   
-    # Die File Version anhand des Codes ermitteln
+    # Analyze the file version from the code
     def Version.file_version_from_code(code)
       if(code =~ /Outline Version - \d\.\d\.(\d\d)/m)
         $1.to_i

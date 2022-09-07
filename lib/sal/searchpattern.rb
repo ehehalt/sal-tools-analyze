@@ -4,7 +4,7 @@ require_relative 'search'
 
 module Sal
   
-  # Klasse für ein Suchen/Ersetzen Pattern
+  # Class for Search and Replace pattern
   class SearchPattern
     
     def initialize(search, replace=nil, type=SearchType::COMPLETE, function=SearchFunction::REPLACE)

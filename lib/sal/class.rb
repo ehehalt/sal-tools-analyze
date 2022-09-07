@@ -4,7 +4,6 @@ require_relative "item.rb"
 
 module Sal
   
-  # Die Klasse repräsentiert eine Klasse
   class Class
 
     def initialize( item )
@@ -17,7 +16,7 @@ module Sal
 
     attr_accessor :name, :item, :type
 
-    # Functions werden erst analysiert, wenn sie benötigt werden
+    # Functions analyzed lazy
     def functions
       if( @functions.nil? )            
         _analyze            

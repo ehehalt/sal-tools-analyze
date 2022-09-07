@@ -4,10 +4,9 @@ require_relative "item.rb"
 
 module Sal
   
-  # Die Klasse repräsentiert eine Konstante
   class Constant
     
-    # Initialisierung über das zugehörige Item
+    # Initialisation with his item
     def initialize( item )
       @item = item
       @name = nil
@@ -36,7 +35,7 @@ module Sal
       ( @item.parent.code =~ /^User/ ) == nil ? false : true
     end
     
-    # Item Funktionalität anzapfen um einfachere Aufrufe in der Anwendung der Klasse zu ermöglichen
+    # Use Item functionality to get simpler calls in the usage of the class
     def method_missing(method, *args)
       if(@item.methods.include? method)
         return @item.send(method, *args )

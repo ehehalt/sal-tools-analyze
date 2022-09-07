@@ -4,7 +4,7 @@ require_relative 'searchpattern.rb'
 
 module Sal
   
-  # SearchResultException für den Fall ...
+  # SearchResultException ...
   class SearchResultException < RuntimeError
     attr :filename
     def initialize(filename)
@@ -12,7 +12,7 @@ module Sal
     end
   end
   
-  # Klasse für die Rückgabe eines Suchresults
+  # Result of a search
   class SearchResult
     
     def initialize(src, dst, replaced = nil, testmode = false)
@@ -30,32 +30,32 @@ module Sal
     
     attr_reader :src, :dst, :replaced, :testmode
     
-    # Alias fuer replaced
+    # Alias for replaced
     def changed
       @replaced
     end
     
-    # Alias fuer replaced
+    # Alias for replaced
     def changed?
       @replaced
     end
     
-    # Alias fuer replaced
+    # Alias for replaced
     def replaced?
       @replaced
     end
     
-    # Alias fuer src
+    # Alias for src
     def source
       @src
     end
     
-    # Alias fuer dst
+    # Alias for dst
     def destination
       @dst
     end
     
-    # Alias fuer testmode
+    # Alias for testmode
     def testmode?
       @testmode
     end
@@ -66,7 +66,7 @@ module Sal
     
   end
   
-  # Enumeration für die verschiedenen Suchtypen
+  # Enumeration for the different search types
   module SearchType
     
     # Search in the complete source code
@@ -79,29 +79,25 @@ module Sal
   
   end
   
-  # Enumeration für die verschiedenen Suchfunktionen
+  # Enumeration fot the different search functions
   module SearchFunction
     
-    # Nach etwas suchen
+    # Search
     SEARCH = :search
     
-    # Suchen und ersetzen (Default)
+    # Replace (Default)
     REPLACE = :replace
     
-    # Löschen (inklusive Childs)
+    # Remove (inclusive childs)
     REMOVE = :remove
     
   end
   
-  # Suchen und Ersetzen Klasse
-  # Beim Ersetzen können einerseits die Zeilen in denen ersetzt wird
-  # als Kommentarzeilen untergefügt werden und zweitens ein Kommentar
-  # gesetzt werden (z.B. Datenbankmigration am ...)
+  # Search and replace class
+  # The original lines could be inserted as comment as child from the
+  # changed line, or normal comments could be inserted.
   class Search
     
-    # Initialisierung der Suchen und Ersetzen Instanz
-    # Uebergabe der Items, die search and replace Arrays
-    # werden leer angelegt und die Defaultwerte gesetzt.
     def initialize(items = nil)
       @items = items
       @pattern = []
@@ -114,22 +110,22 @@ module Sal
     attr_accessor :search_in_code
     attr_accessor :backup_code,:backup_info, :testmode, :pattern
 
-    # Remove Pattern setzen (ruft intern add_pattern auf)
+    # Set remove pattern (calls internally add_pattern)
     def add_remove_pattern(search = nil, type = SearchType::COMPLETE)
       add_pattern( SearchPattern.new( search, nil, type, SearchFunction::REMOVE ) )
     end
         
-    # Replace Pattern setzen (ruft intern add_pattern auf)
+    # Set replace pattern (calls internally add_pattern)
     def add_replace_pattern(search = nil, replace = nil, type = SearchType::COMPLETE)
       add_pattern( SearchPattern.new( search, replace, type ) )
     end
     
-    # Search Pattern setzen (ruft intern add_pattern auf)
+    # Set search pattern (calls internally add_pattern)
     def add_search_pattern(search = nil, type = SearchType::COMPLETE)
       add_pattern( SearchPattern.new( search, nil, type ) )
     end
     
-    # Pattern setzen
+    # Set pattern
     def add_pattern( pattern )
       @pattern << pattern
       return pattern
@@ -163,10 +159,8 @@ module Sal
       return results
     end
     
-    # Gibt die Items zurueck. 
-    # Je nachdem wir das Property @search_in_comments
-    # gesetzt ist werden alle Items oder nur die nicht 
-    # kommentierten zurueckgegeben.
+    # Return the found items.
+    # If @search_in_comments is set the comments would returned additionaly
     def get_items(search_type=SearchType::COMPLETE)
       result = []
       @items.each do | item |
@@ -175,7 +169,7 @@ module Sal
       result
     end
     
-    # Prüft, ob das Item im SearchType enthalten ist
+    # Check if the item is in the SearchType
     def item_in_search_type?(item, type=SearchType::COMPLETE)
       result = case type
       when SearchType::CODE
@@ -216,9 +210,9 @@ module Sal
       
     end
       
-    # Der Kommentar wird unter dem Item angelegt
-    # parent = das parent item unter dem der Kommentar als Item eingefügt werden soll
-    # info = der text der als Code-Teil im Item zu sehen ist 
+    # The comment would be inserted as child of the item
+    # parent = the parent item 
+    # info = the text - seen as code part of the item
     def item_write_comment(parent, info)
       comment_item = parent.copy
       comment_item.parent = parent
@@ -233,7 +227,7 @@ module Sal
       comment_item
     end
     
-    # Das Originalitem wird als Kommentar unter den Parent kopiert
+    # The original item as child comment under the new item
     def item_backup(item, parent)
       backup_item = item.copy
       backup_item.parent = parent
@@ -250,8 +244,7 @@ module Sal
   private
     
     # Deprecated -> search
-    # Erstellt ein Backup von einem Item 
-    # Besteht aus zwei Teilen: Backup des Items und Kommentar setzen (je nach Einstellung)
+    # Takes a backup of the item
     def _backup(item)
       pos = @items.index(item) + 1
       info = _backup_info(item, item, backup_info) unless backup_info.nil?
@@ -259,10 +252,10 @@ module Sal
     end
     
     # Deprecated --> _backup
-    # Der Kommentar wird unter das Item kopiert
-    # item = das Item für den ein Kommentar gebaut werden soll
-    # parent = das parent item unter dem der Kommentar als Item eingefügt werden soll
-    # info = der text der als Code-Teil im Item zu sehen ist 
+    # The comment would be copied as child unter the item
+    # item = the item as base of the comment
+    # parent = the parent item for the comment
+    # info = the text for the code part of the comment
     def _backup_info(item, parent, info)
       new_item = item.copy
       new_item.parent = parent
@@ -278,7 +271,7 @@ module Sal
     end
     
     # Deprecated --> _backup
-    # Der Originalcode wird als Kommentar unter das veränderte Item kopiert
+    # The original code would be added as child under the changed item
     def _backup_item(item, parent)
       new_item = item.copy
       new_item.parent = parent

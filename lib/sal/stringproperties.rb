@@ -5,12 +5,8 @@ require_relative "item.rb"
 
 module Sal
 
-  # Diese Klasse repräsentiert ein einzelnes Stringproperty
-  # Zur Zeit gibt es nur lesenden Zugriff, da noch keine
-  # Funktionaliät angedacht ist, String Properties verändert
-  # zurückzuschreiben. 
-  # Das Property Value enthält je nach Typ den entsprechenden
-  # Datentyp.
+  # At the moment this is only readable
+  # The property value has a type specific datatype
   class StringProperty
     
     TYPE_STRING = :string
@@ -43,11 +39,10 @@ module Sal
     
   end
   
-  # Die Klasse StringProperties dient der Analyse der StringProperties im Quellcode
-  # Diese wird für zusätzliche Properties für Objekte verwendet, z. B. um GUI-Objekte
-  # den QuickTabs zuzuordnen.
+  # The class StringProperties analyzes the StringProperties in the source code
+  # This would be used as additional properties for objects, for example to add GUI objects to QuickTabs
   #
-  # VIEWINFO und DT_MAKERUNDLG befinden sich im Einbau (Alpha)
+  # TODO: VIEWINFO and DT_MAKERUNDLG are in developement (alpha)
   class StringPropertyAnalyzer
 
     CLASSPROPSSIZE = "CLASSPROPSSIZE"
@@ -58,39 +53,39 @@ module Sal
     VIEWINFO = "VIEWINFO"
     DT_MAKERUNDLG = "DT_MAKERUNDLG"
     
-    # Separator zwischen Key und Nummernwert
+    # Separator between key and number
     SEP_NUMBER_ASCII = 0x02
     SEP_NUMBER_UTF16 = 0x04
     SEPS_NUMBER = [SEP_NUMBER_ASCII, SEP_NUMBER_UTF16]
     
-    # Separator zwischen Key und Stringwert
+    # Separator between key and string
     SEP_STRING_ASCII = 0x06
     SEP_STRING_UTF16 = 0x0C # "\f"
     SEPS_STRING = [SEP_STRING_ASCII, SEP_STRING_UTF16]
     
-    # Separator zwischen Key und einem Array von Stringwerten
+    # Separator between key and string array
     SEP_STRING_ARRAY_ASCII = 0x0E
     SEP_STRING_ARRAY_UTF16 = 0x1C
     SEPS_STRING_ARRAY = [SEP_STRING_ARRAY_ASCII, SEP_STRING_ARRAY_UTF16]
     
-    # Separator zwischen Key und einer Konstanten
+    # Separator between key and constant
     SEP_VALUE_ASCII = 0x0B # "\v"
     SEP_VALUE_UTF16 = 0x16
     SEPS_VALUE = [SEP_VALUE_ASCII, SEP_VALUE_UTF16]
 
-    # Seperator zwischem Make Infos (DT_MAKERUNDLG)
+    # Seperator between make infos (DT_MAKERUNDLG)
     SEP_MAKE_ASCII = 0x0F
     SEP_MAKE_UTF16 = 0x0F
     SEPS_MAKE = [SEP_MAKE_ASCII, SEP_MAKE_UTF16]
 
-    # Die Trenner zwischen dem Key und dem Value
+    # The separators between dem key and dem Value
     SEPS_DATA = SEPS_NUMBER + SEPS_STRING + SEPS_STRING_ARRAY + SEPS_VALUE + SEPS_MAKE
     
-    # Der Trenner zwischen mehreren Values innerhalb eines Arrays
+    # Separator between multiple values of an array
     SEP_ARRAY = 0x09 # "\t"
     SEP_ARRAY_STRING = [SEP_ARRAY].pack('C*')
     
-    # Die Trenner um die einzelnen Bestandteile
+    # Separator for enclosing the parts
     SEP_BOUND_1 = 0x00
     SEP_BOUND_2 = 0xFEFF
     SEPS_BOUND = [SEP_BOUND_1, SEP_BOUND_2]
@@ -99,13 +94,13 @@ module Sal
     def initialize(code_behind_data)
       @data = code_behind_data
       if RUBY_PLATFORM =~ /darwin/
-        # Für die Analyse unter dem Mac notwendig!
+        # for the analyze on the Mac neccessary
         @data = @data.gsub(/\r/,"")
       end
       
-      # @group_names => Die Namen der einzelnen Datenblöcke (z.B. CLASSPROPSSIZE)
+      # @group_names => The names of the data blocks (z.B. CLASSPROPSSIZE)
       @group_names = Hash.new
-      # @group_data => Die Daten die zur jeweiligen Gruppe gehören
+      # @group_data => The group data 
       @group_data = Hash.new
       @properties = []
       @utf16 = false
@@ -115,11 +110,9 @@ module Sal
     attr_reader :data, :group_names, :group_data, :utf16
     attr_accessor :properties
     
-    # Sind die StringProperties im UTF16-LE Format abgelegt?
-    # Die Prüfung geschieht anhand des zweiten gespeicherten Bytes.
-    # Ist dieses 00, so wird angenommen, dass es sich um UTF16-LE
-    # Code handelt. Falls das irgendwann nicht funktioniert, sollte
-    # dieser Teil überarbeitet werden
+    # Are the StringProperties encoded in UTF16-LE?
+    # The analyze use the second saved byte.
+    # If this is '00', then we asume it is UTF16-LE
     def utf16?
       return @utf16
     end

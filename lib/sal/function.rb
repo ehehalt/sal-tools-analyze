@@ -4,7 +4,7 @@ require_relative "item.rb"
 
 module Sal
     
-  # Die Klasse representiert eine einzelnes File Include.
+  # The class represent a function
   class Function
 
     def initialize( item )

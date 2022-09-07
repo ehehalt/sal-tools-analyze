@@ -6,15 +6,13 @@ require_relative "stringproperties.rb"
 
 module Sal
   
-  # Die Klasse Item representiert eine Quellcode-Zeile eines Gupta-Quellcodes
-  # Sie enthält Verweise auf den Parent und die Childs der Zeile. Dadurch kann
-  # man sich durch den Quellcode navigieren.
+  # This is the representation of one line of gupta code.
+  # Item has references to his prarent and his cilds
   class Item
     include Format
     
-    # Item erzeugen, optional kann das Format übergeben werden
-    # andernfalls wird das Format anhand der Quellcodezeile ermittelt.
-    # Bei der Initialisierung wird die Quellcodezeile analysiert.
+    # Create Item. If the optional file_format is empty, the 
+    # file_format would be analyzed from the source code.
     def initialize( line, file_format = nil, source_code = nil )
       @original = line
       @format = file_format.nil? ? Format.get_from_line(line) : file_format
@@ -28,18 +26,18 @@ module Sal
       @parts = []
       @property_analyzer = nil
       @source_code = source_code
-      # path und path_part nur einmalig ermitteln (Performance!)
+      # path und path_part would only analyzed at one time (performance!)
       @path = nil
       @path_part = nil
       analyze
     end
     
-    # Ist das Item ein Kommentar?
+    # Is the item a comment?
     def item_commented?
       return @commented
     end
     
-    # Ist das Item oder ein Parent des Items kommentiert?
+    # Is the item or a parent of the item is commented?
     def commented?
       return true if item_commented?
       if parent.nil?
@@ -49,30 +47,31 @@ module Sal
       end
     end
     
-    # Aus dem Item einen Kommentar machen wenn es noch kein Kommentar ist
+    # Comment out the item (it the item is not a comment)
     def item_comment
       self.code = "! #{self.code}" unless item_commented?
       _analyze_commented
     end
     
-    # Wurde der Quellcode schon analysiert?
+    # Is the source code is analyzed?
     def analyzed?
       @analyzed
     end
     
-    # Ist die Zeile eine Code Zeile (z.B. Set sTest = "Hallo")
-    # Siehe auch command.rb!
+    # Is this is a code line (Set sTest = "Hallo")
+    # Reference: command.rb!
     def is_code_line?
       Command.is_code_line? code
     end
     
-    # Dient dem Setzen der Quellcodezeile. Daraufhin wird neu analysiert.
+    # Set a new source code to this item.
+    # After the set, the source code woulr analyzed.
     def line=(value)
       @original = value
       analyze
     end
     
-    # Rückgabe der Quellcodezeile. Sie wird dynamisch aus den Parts zusammengebaut
+    # Returns the current source code dynamic from the source code parts.
     def line
       case @format
        when TEXT
@@ -84,28 +83,27 @@ module Sal
        end
     end
     
-    # Setzen des Outline Levels
+    # Set the Outline Level
     def level=(value)
       @parts[1] = value
     end
     
-    # Rückgabe des Outline Levels
+    # Returns the Outline Level
     def level
       @parts[1].to_i
     end
     
-    # Setzen des Quellcodes der Zeile
+    # Set the code part of the line
     def code=(value)
       @parts[5] = value
     end
     
-    # Rückgabe des Quellcodes der Zeile
-    # Es fehlen alle Outline und .data Infos
+    # Return the code part of the line
     def code
       @parts[5]
     end
     
-    # Gibt ein + zurück wenn das aktuelle Item Childs hat, ansonsten ein -
+    # Returns a "+" if the item has childs, otherwise returns a "-"
     def child_indicator
       @parts[3]
     end
@@ -166,18 +164,17 @@ module Sal
     attr_accessor :tag, :code_line_nr, :parts
     attr_reader   :source_code
     
-    # Gibt als String die Zeile zurück und nicht das Objekt
+    # Returns the source code line not the object
     def to_s
       line
     end
     
-    # Gibt ein neues Objekt auf Basis des aktuellen Quellcodes von diesem Objekt zurück
-    # Es beinhaltet aber keine Informationen über Parent, Childs, ...
+    # Returns a duplicate of the item without parent and childs
     def copy
       Item.new(self.line)
     end
     
-    # gibt die Childs und deren Childs usw. zurück
+    # Returns the childs and the childs of the childs as an array
     def childs_deep
       deep = []
       deep << self
@@ -192,9 +189,7 @@ module Sal
       childs_deep
     end
 	
-  	# Neues Child Item erzeugen und and die entsprechende Stelle als Child einbauen
-  	# Per default an die erste Stelle. Gibt das neue Item nach Erstellung und Einfügen
-  	# dann auch zurück.
+  	# Create a new child item, inserts it at the position (index) and returns it
   	def insert_new_child(code = "! new item", index=0)
   		line = ".head "
   		line += (level + 1).to_s
@@ -207,8 +202,7 @@ module Sal
   		new_item
   	end
 
-    # path_part wird nur einmalig ermittelt, da eine Verwendung
-    # in der Quellcode
+    # path_part will only analyzed unique
     def path_part
       if @path_part.nil?
         if /^(\w| )+:(.*)$/ =~ code 
@@ -241,7 +235,7 @@ module Sal
       
   private
     
-    # Analyse der Quellcodezeile
+    # Analyze the code
     def analyze
       if(!@analyzed)
         case @format
@@ -250,13 +244,13 @@ module Sal
         when INDENTED
           @analyzed = _analyze_indented
         else
-          # Es kann nur Text oder Indented analysiert werden
+          # Analyze only exists for TEXT or INDENTED
           @analyzed = false                 
         end
       end
     end    
     
-    # Analyse der Quellcodezeile (Textmode)
+    # Analyze the code (textmode)
     def _analyze_textmode
       # re = /(^\.head )(\d+?)( )([+-])(  )(.*?)(\n*)$/
       # re = /(^\.head )(\d+?)( )([+-])(  )(.*?)(\r\n.*)/m
@@ -266,7 +260,7 @@ module Sal
         raise "Item::_analyze_textmode could not analyze level and code: #{@original}"
       else
         # 1 = Level, 3 = Child Indkator, 5 = Code
-        # [1..-1] => md[0] ist der komplette String, der hier nicht benötigt wird
+        # [1..-1] => md[0] is the complete string, not neccessary at this point
         @parts = md.to_a[1..-1]
         _analyze_textmode_split_code
         return _analyze_commented() 
@@ -297,7 +291,7 @@ module Sal
       self.code_behind_data = new_data
     end
     
-    # Analyse der Quellcodezeile (Indented)
+    # Analyze the code (indented)
     def _analyze_indented
       if(@original =~ /(^\t*)(.*?)(\r\n.*)/m)
         @parts = []
@@ -311,7 +305,7 @@ module Sal
       return false
     end
     
-    # Prüfung ob die Zeile kommentiert ist
+    # Check if the code is commented
     def _analyze_commented
       @commented = true if(self.code =~ /\A\s*?!/)
       return true

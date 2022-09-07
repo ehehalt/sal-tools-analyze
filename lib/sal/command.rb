@@ -2,7 +2,7 @@
 
 module Sal
   
-  # Ermittelt, ob eine Quellcodezeile Quellcode ist oder Strukturcode
+  # Analyze if the code line is source code or structure information
   module Command
 
     @@commands = { 

@@ -5,7 +5,7 @@ require_relative "pictab.rb"
 
 module Sal
   
-  # Die Klasse repräsentiert ein Form Window, Table Window oder Dialog Box, ...
+  # Represents a Form Window, Table Window or a Dialog Box
   class Window
 
   	def initialize( item )

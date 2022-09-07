@@ -10,7 +10,7 @@ module Sal
       return (code[0..1] == (0xFF.chr + 0xFE.chr))
     end
     
-    # Liest die Datei aus und übernimmt den Dateinamen
+    # Reads the file and use the filename
     def CodeHelper.read_code_from_file(filename)
       code = IO.binread filename
       if(CodeHelper.utf16le? code)

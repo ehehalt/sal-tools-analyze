@@ -4,16 +4,15 @@ require_relative 'codehelper'
 
 module Sal
     
-  # Ermittelt das Fileformat von Gupta Quellcode.
-  # Das Ergebnis ist eine der Konstanten TEXT, NORMAL oder INDENTED.
+  # Get the file format from the Gupta source code
+  # The result is TEXT, NORMAL or INDENTED.
   module Format
 
     TEXT = :t
     NORMAL = :n
     INDENTED = :i
     
-    # Ermitteld das Fileformat für den im übergebenen String
-    # vorhandenen Quellcode.
+    # Get the file format from the string code
     def Format.get_from_code( code )
       if(code =~ /Outline Version - \d\.\d\.(\d\d)/m)
         if(code =~ /^\.head/)
@@ -26,9 +25,7 @@ module Sal
       end
     end
     
-    # Ermitteld das Fileformat für die Datei deren Name übergeben
-    # wird. Es wird die Datei gelesen und der Quellcode anschliessend
-    # an die Funktion get_from_code weitergegeben.
+    # Get the file format from the file
     def Format.get_from_file( filename )
       code = CodeHelper.read_code_from_file filename
       return get_from_code( code )

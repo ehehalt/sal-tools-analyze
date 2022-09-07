@@ -4,7 +4,6 @@ require_relative "item.rb"
 
 module Sal
   
-  # Die Klasse repräsentiert ein Form Window, Table Window oder Dialog Box, ...
   class PicTab
 
   	def initialize( item )
