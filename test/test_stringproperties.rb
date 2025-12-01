@@ -1,14 +1,14 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require 'pp'
 
 require_relative '../lib/sal/item'
 require_relative '../lib/sal/stringproperties'
 require_relative '../lib/sal/code'
 
-class TestStringProperties < MiniTest::Test
+class TestStringProperties < Minitest::Test
   
   def test_code_behind_data
     assert_equal(@item1.code_behind_data, @strprops1.data)
@@ -260,4 +260,4 @@ END_OF_STRING
   
 end
 
-MiniTest.autorun
+Minitest.autorun

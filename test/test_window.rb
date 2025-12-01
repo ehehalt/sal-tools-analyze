@@ -1,11 +1,11 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/window'
 require_relative '../lib/sal/code'
 
-class TestWindow < MiniTest::Test
+class TestWindow < Minitest::Test
 
   def setup
     @file0 = "data/test.40.text.quicktabs.0.app"
@@ -58,4 +58,4 @@ class TestWindow < MiniTest::Test
 
 end
 
-MiniTest.autorun
+Minitest.autorun

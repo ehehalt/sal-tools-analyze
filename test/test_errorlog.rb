@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/errorlog'
 
-class TestErrorLog < MiniTest::Test
+class TestErrorLog < Minitest::Test
 
   def setup
     @err_file_42 = "data/test.42.err"
@@ -34,4 +34,4 @@ class TestErrorLog < MiniTest::Test
 
 end
 
-MiniTest.autorun
+Minitest.autorun

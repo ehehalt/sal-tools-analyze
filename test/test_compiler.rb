@@ -1,11 +1,11 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/compiler'
 require_relative '../lib/sal/version'
 
-class TestCompiler < MiniTest::Test
+class TestCompiler < Minitest::Test
   
   def test_initialize
     compiler = Sal::Compiler.new()
@@ -56,4 +56,4 @@ class TestCompiler < MiniTest::Test
 
 end
 
-MiniTest.autorun
+Minitest.autorun

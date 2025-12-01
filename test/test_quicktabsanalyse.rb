@@ -1,11 +1,11 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require 'pp'
 require_relative '../lib/sal/code'
 
-class TestQuickTabsAnalyse < MiniTest::Test
+class TestQuickTabsAnalyse < Minitest::Test
   
   def setup
     @file0 = "data/test.40.text.quicktabs.0.app"
@@ -108,4 +108,4 @@ class TestQuickTabsAnalyse < MiniTest::Test
   
 end
 
-MiniTest.autorun
+Minitest.autorun

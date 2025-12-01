@@ -1,11 +1,11 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/external'
 require_relative '../lib/sal/code'
 
-class TestExternal < MiniTest::Test
+class TestExternal < Minitest::Test
 
   def test_item_external
     name = "vti41.dll"
@@ -35,4 +35,4 @@ class TestExternal < MiniTest::Test
 
 end
 
-MiniTest.autorun
+Minitest.autorun

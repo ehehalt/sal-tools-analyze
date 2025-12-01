@@ -1,11 +1,11 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/item'
 require_relative '../lib/sal/code'
 
-class TestItem < MiniTest::Test
+class TestItem < Minitest::Test
 
   def setup
     @lines = []
@@ -187,4 +187,4 @@ class TestItem < MiniTest::Test
 
 end
 
-MiniTest.autorun
+Minitest.autorun

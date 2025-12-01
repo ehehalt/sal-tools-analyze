@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/externalfunction'
 
-class TestExternalFunction < MiniTest::Test
+class TestExternalFunction < Minitest::Test
 
   def get_sample_external
     item = Sal::Item.new(".head 3 +  Library name: Test.dll\r\n")
@@ -74,4 +74,4 @@ class TestExternalFunction < MiniTest::Test
   end
 end
 
-MiniTest.autorun
+Minitest.autorun

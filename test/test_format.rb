@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/format'
 
-class TestFileFormat < MiniTest::Test
+class TestFileFormat < Minitest::Test
 
   def setup
     @files = []
@@ -59,4 +59,4 @@ class TestFileFormat < MiniTest::Test
   end
 end
 
-MiniTest.autorun
+Minitest.autorun

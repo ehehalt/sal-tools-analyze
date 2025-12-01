@@ -1,11 +1,11 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/class'
 require_relative '../lib/sal/code'
 
-class TestClass < MiniTest::Test
+class TestClass < Minitest::Test
 
   def test_class
     name = "Test"
@@ -32,4 +32,4 @@ class TestClass < MiniTest::Test
   
 end
 
-MiniTest.autorun
+Minitest.autorun

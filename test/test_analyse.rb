@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/analyse'
 
-class TestAnalyse < MiniTest::Test
+class TestAnalyse < Minitest::Test
 
   def setup
     @filecount_sql = 1
@@ -61,4 +61,4 @@ class TestAnalyse < MiniTest::Test
 
 end
 
-MiniTest.autorun
+Minitest.autorun

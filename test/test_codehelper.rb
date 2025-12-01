@@ -1,11 +1,11 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 
 require_relative '../lib/sal/codehelper'
 
-class TestCodeHelper < MiniTest::Test
+class TestCodeHelper < Minitest::Test
 
   def setup
     @utf_files = []
@@ -37,4 +37,4 @@ class TestCodeHelper < MiniTest::Test
 end
 
 
-MiniTest.autorun
+Minitest.autorun

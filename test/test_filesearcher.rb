@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/filesearcher'
 
-class TestFileSearcher < MiniTest::Test
+class TestFileSearcher < Minitest::Test
 
   def setup
     @dircount = 1
@@ -85,4 +85,4 @@ class TestFileSearcher < MiniTest::Test
   end
 end
 
-MiniTest.autorun
+Minitest.autorun

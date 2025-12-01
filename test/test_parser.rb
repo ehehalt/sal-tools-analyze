@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/parser'
 
-class TestLexer < MiniTest::Test
+class TestLexer < Minitest::Test
   
   def setup
   	
@@ -44,4 +44,4 @@ class TestLexer < MiniTest::Test
 
 end
 
-MiniTest.autorun
+Minitest.autorun

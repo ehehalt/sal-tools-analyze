@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/search'
 
-class TestSearchResult < MiniTest::Test
+class TestSearchResult < Minitest::Test
   
   def test_initialize_1
     result = Sal::SearchResult.new(1,2,true,true)
@@ -83,4 +83,4 @@ class TestSearchResult < MiniTest::Test
 
 end
 
-MiniTest.autorun
+Minitest.autorun

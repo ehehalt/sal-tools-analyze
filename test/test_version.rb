@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/version'
 
-class TestVersion < MiniTest::Test
+class TestVersion < Minitest::Test
   
   def test_file_to_td
     
@@ -84,7 +84,7 @@ class TestVersion < MiniTest::Test
   
   def test_to_code
     version = Sal::Version.new(27)
-    assert_equal("Outline Version - 4.0.27", version.to_code("Outline Version - 4.0.26"))
+    assert_equal("Outline Version - 4.0.27", version.to_code(+"Outline Version - 4.0.26"))
   end
 
   def test_cbi_exe
@@ -105,4 +105,4 @@ class TestVersion < MiniTest::Test
 	
 end
 
-MiniTest.autorun
+Minitest.autorun

@@ -1,13 +1,13 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require 'pp'
 require_relative '../lib/sal/search'
 require_relative '../lib/sal/code'
 require_relative '../lib/sal/item'
 
-class TestSearch < MiniTest::Test
+class TestSearch < Minitest::Test
   
   def setup
     @lines = []
@@ -206,5 +206,5 @@ END_OF_STRING
   
 end
 
-MiniTest.autorun
+Minitest.autorun
 

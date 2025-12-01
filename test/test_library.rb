@@ -1,12 +1,12 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/library'
 require_relative '../lib/sal/code'
 require_relative '../lib/sal/item'
 
-class TestLibrary < MiniTest::Test
+class TestLibrary < Minitest::Test
 
   def test_item_file_include
     name = "qckttip.apl"
@@ -36,4 +36,4 @@ class TestLibrary < MiniTest::Test
   
 end
 
-MiniTest.autorun
+Minitest.autorun

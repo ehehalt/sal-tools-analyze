@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 
 require_relative "test_analyse.rb"
 require_relative "test_class.rb"
@@ -28,4 +28,4 @@ require_relative "test_stringproperties.rb"
 require_relative "test_version.rb"
 require_relative "test_window.rb"
 
-MiniTest.autorun
+Minitest.autorun

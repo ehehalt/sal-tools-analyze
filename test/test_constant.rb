@@ -1,11 +1,11 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/code'
 require_relative '../lib/sal/constant'
 
-class TestClass < MiniTest::Test
+class TestClass < Minitest::Test
 
   def code_class
     # Neue Klasse um die Initialisierung zu umgehen
@@ -73,4 +73,4 @@ class TestClass < MiniTest::Test
     
 end
 
-MiniTest.autorun
+Minitest.autorun

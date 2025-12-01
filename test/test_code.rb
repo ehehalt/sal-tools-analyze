@@ -1,7 +1,7 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require 'ostruct'
 require 'pp'
 
@@ -9,7 +9,7 @@ require_relative '../lib/sal/code'
 require_relative '../lib/sal/format'
 require_relative '../lib/sal/constant'
 
-class TestCode < MiniTest::Test
+class TestCode < Minitest::Test
 
   def setup
     @files = []
@@ -279,4 +279,4 @@ END_OF_STRING
   end
 end
 
-MiniTest.autorun
+Minitest.autorun

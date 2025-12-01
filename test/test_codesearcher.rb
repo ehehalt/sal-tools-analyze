@@ -1,12 +1,12 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/codesearcher'
 require_relative '../lib/sal/filesearcher'
 require_relative '../lib/sal/searchpattern'
 
-class TestCodeSearcher < MiniTest::Test
+class TestCodeSearcher < Minitest::Test
 
   def setup
     @filter = :filter
@@ -98,4 +98,4 @@ class TestCodeSearcher < MiniTest::Test
   
 end
 
-MiniTest.autorun
+Minitest.autorun

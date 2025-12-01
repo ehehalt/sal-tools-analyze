@@ -1,10 +1,10 @@
 #!/opt/local/bin/ruby
 # coding: utf-8
 
-require 'minitest/autorun'
+require 'Minitest/autorun'
 require_relative '../lib/sal/searchpattern'
 
-class TestSearchPattern < MiniTest::Test
+class TestSearchPattern < Minitest::Test
   
   def setup
     @search = /search/
@@ -93,4 +93,4 @@ class TestSearchPattern < MiniTest::Test
   
 end
 
-MiniTest.autorun
+Minitest.autorun
