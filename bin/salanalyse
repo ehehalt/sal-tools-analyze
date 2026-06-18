@@ -59,8 +59,8 @@ def analyse(dir, pattern)
     end
 end
 
-ARGV << "-s"
-ARGV << "/Users/me/Source/work.local/Sal/BB15"
+# ARGV << "-s"
+# ARGV << "/Users/me/Source/work.local/Sal/BB15"
 
 if ARGV.length > 0
 	mode = ARGV[0]

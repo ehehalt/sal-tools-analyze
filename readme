@@ -1,7 +1,7 @@
 Library for the analyze of SAL code
 
 This library gives the basic functionality to analyse Gupta source code.
-Copyright (c)2007-2015 by Michael Ehehalt
+Copyright (c)2007-2026 by Michael Ehehalt
 Error and feature list at the end of the document
 
 gem build sal.gemspec
@@ -10,6 +10,7 @@ gem build sal.gemspec
 
 History (versioning begins with 1.0.0 with using the gem system).
  
+ v1.1.9 - salanalyse fixed
  v1.1.8 - Sal::Item: path and path_part added
  v1.1.7 - MiniTest changes (MiniTest::Unit::TestCase => MiniTest::Test, etc.)
  				- TestQuickTabsAnalyse added
