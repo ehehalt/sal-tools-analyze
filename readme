@@ -11,6 +11,7 @@ gem build sal.gemspec
 History (versioning begins with 1.0.0 with using the gem system).
  
  v1.1.9 - salanalyse fixed
+ 				- TD 7.0, 7.1, 7.2, 7.3, 7.4 Outline support added
  v1.1.8 - Sal::Item: path and path_part added
  v1.1.7 - MiniTest changes (MiniTest::Unit::TestCase => MiniTest::Test, etc.)
  				- TestQuickTabsAnalyse added
